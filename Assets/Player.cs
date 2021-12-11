@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D rb;
-    public float jumpVelocity = 1.0f;
-    public float moveSpeed = 1f;
-    
-
+    public Vector2 velocity = Vector2.zero;
+    public Transform contact;
+    public LayerMask lm;
+    public bool isGrounded = true;
+    public float contactRadius;
     void Start() {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void FixedUpdate() {
-        // var vel = new Vector2(Input.GetAxis("Horizontal"), 0);
-        var y = 0.0f;
-        if (Input.GetKey(KeyCode.Space)) {
-            Debug.Log("Jump");
-            y = jumpVelocity;
-        }
-        rb.AddForce(new Vector2(moveSpeed * Time.deltaTime, y * Time.deltaTime));
-        
+    void OnDrawGizmos() {
+
     }
+    void Update() {
+        isGrounded = Physics2D.OverlapCircle(contact.position, 1.1f, this.lm);
+        if(isGrounded && Input.GetButtonDown("Jump")){
+            rb.velocity = new Vector2(0, rb.velocity.y + 20.0f);
+        }
+    }
+
 }
